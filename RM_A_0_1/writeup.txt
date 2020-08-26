@@ -1,0 +1,40 @@
+GCC command line options:
+@read -p "comment" h;
+	This command ask the user for any input which is stored in h. This pauses the running of Makefile which helps the user to understand better the running of Makefile.
+$gcc -E hello.c -o hello.i  
+	This command Stop after the preprocessing stage.
+	Do not run the compiler proper. The output is in the form of preprocessed source code, which is sent to the standard output. Here we write -o to create a new file named "hello.i" and store the output of "-E hello.c" in it
+$gcc -S hello.c -o hello.s
+	This command stop after the stage of compilation proper. It do not assemble. The output is in the form of an assembler code file stored by the name "hello.s" using -o
+$gcc -C hello.c -o hello.o
+	This command compile or assemble the source files, but do not link. The linking stage is not done yet. The output is in the form of an object file named "hello.o"
+$gcc hello.c -o hello.out
+	This -o command Place output in file hello.out . All the source files on the command line will be compiled at once.
+
+
+
+DESCRIPTIONS:
+There are 4 steps in total:
+
+1. preprocessing step:
+	we make a file named "hello.i" after this step.
+	It is a preprocessed source code. This file includes the header files, it do not have any comments. And if we are using macros the macro name in the code would be replaced by the values
+
+2. compilation step:
+	we make a file named "hello.s" after this step.
+	Our preprocessed code is converted into assembly language code in this step.
+	You can open and view the code in assembly language.
+
+3. Compilation:
+	we make a file named "hello.o" after this step.
+	In this step we assemble our assembly language code and convert it to machine level language. The file is in machine level language. We cannot understand it.
+
+4. Linking:
+	In this step we make our final executable file after linking different compiled/assembled files.
+	we finally create hello.out executable file. which could be run
+	The file if opened in text format ,we would see written in machine level code.
+	We can run this file using $./hello.out
+
+
+
+
