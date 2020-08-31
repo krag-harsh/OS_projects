@@ -4,7 +4,7 @@ default:
 	@read -p "Press any key to start compilation step and make file hello.s ..." h;
 	gcc -S hello.c -o hello.s
 	@read -p "Press any key to start Assembling and make file hello.o ..." h;
-	gcc -C hello.c -o hello.o
+	gcc -c hello.c -o hello.o
 	@read -p "Press any key to start linking step and make the final executable file hello.out ..." h;
 	gcc hello.c -o hello.out
 	@read -p "All the steps are completed press any key to continue" h;
