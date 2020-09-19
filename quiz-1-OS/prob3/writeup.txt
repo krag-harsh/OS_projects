@@ -1,0 +1,15 @@
+we know long int and int takes 8 and 4 bytes of memory respectively
+if we want to store 8 long int we need 8*8=64 bit of storage 
+simillarly 16 int needs 16*4=64 bit of storage.
+we are trying to store this in char form. As each char takes 1 byte.
+
+we access these bytes of required location by left shifting it and doing a binary sum with 0XFF(15 in hex which is 8 1's in a row) .After that we store these binary in the required char position.
+
+we are using memcpy function from string.h to atomate this process, the logic remains the same.
+to use memcpy:
+we give address of destination, address of source varable and the number of bits to be copied.
+
+
+the shifting is done in a multiple of 8(as 1 byte=8 bit).
+we are using unsigned char(so that in binary addition with 0xff the first bit on conversion to 1 do not give a negative value)
+

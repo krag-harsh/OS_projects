@@ -1,0 +1,11 @@
+main() of c can call checkGreater only if it is declared global in assembly code.
+
+By default the entry point is marked by _start which need to be declared global for the linker to know the entry point.
+if we want a different  entry point we can do so by specifing the linker using: ld -e "entrylocation"
+unlike c , we need to declare global to each function we want to make global.
+
+
+there was a problem while linking the c with assembly code, as gcc linker consider the global label declared in assembly as the entry point. 
+We need _start as the entry point(requirement of the question), and global function(if we want to use it in c).
+if we declare both as global, the gcc linker would not be able to find where to start from giving an error.
+Hence the program did not work

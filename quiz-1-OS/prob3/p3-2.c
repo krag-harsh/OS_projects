@@ -8,9 +8,9 @@ int main()
     // printf("size of long int %ld\n",sizeof(long int));
     // printf("pointer value of li is %p\n",pli);   
 
-    char x[64];
+    unsigned char x[64];    //declaring as unsigned so that it do not retain -ve values
     int sto[16];
-    sto[0]=122;
+    sto[0]=257;
     sto[1]=121;
     sto[2]=126;
     sto[3]=125;

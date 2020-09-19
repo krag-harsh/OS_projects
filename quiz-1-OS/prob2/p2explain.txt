@@ -1,0 +1,10 @@
+code to compile the file
+$gcc -c p2.c
+
+yes the code on compilation would give warnings:
+warning 1:return type defauts to 'int': as return should be double(as it returns double value) by default it takes int as return type
+warning 2:include <math.h> or provide a declaration of 'round': as we are using round function without importing it or declaring it
+
+
+
+

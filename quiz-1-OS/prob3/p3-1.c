@@ -3,7 +3,7 @@
 
 int main()
 {
-    char x[64];
+    unsigned char x[64];
     long int sto[8];
     sto[0]=122;
     sto[1]=121;
