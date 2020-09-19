@@ -2,4 +2,4 @@ There are a lot of changes in the assembly file, as in x86 we need to access the
 while the first 6 parameters passed in x86-64 are stored in registers and we do not need a stack to access it.
 
 Also in x86 the register size is 32bit, x86-64 is an extension to that of size 64 bit.(example: eax in x86, rax in x86-64)
-in x86-64 we can use the 32 bit memory by using eax,etc register(backcompatibility).
+in x86-64 we can use the 32 bit memory by using eax,etc register.

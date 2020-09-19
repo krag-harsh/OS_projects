@@ -1,0 +1,3 @@
+If there is a need of protection, paging or multitasking, then will use the long mode, else i will be using real mode.
+As real mode is sufficient for RAM size till 1MB, it is faster than long mode(due to smaller register size and absence
+of decriptor table) also long mode would require more space to run(which is already very low in our system)
