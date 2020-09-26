@@ -79,12 +79,19 @@ int main()
 //internal commands:
 		if(strcmp("cd", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
+			//chdir("..");
+			chdir(comarray[1]);
 		}
 
 		if(strcmp("echo", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
+			int i=1;
+			while(comarray[i]!=NULL)
+			{
+				printf("%s ",comarray[i]);
+				i++;
+			}
+			printf("\n");
 		}
 
 		if(strcmp("history", comarray[0]) == 0 )
@@ -95,7 +102,9 @@ int main()
 
 		if(strcmp("pwd", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
+			char *adde=(char *)malloc(500*sizeof(char));
+			getcwd(adde,500);
+			printf("%s \n",adde);
 		}
 
 
