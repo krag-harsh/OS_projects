@@ -9,7 +9,7 @@
 #include <string.h>
 
 
-char **get_input(char *input) {
+char **get_array(char *input) {
 
 	// if (strlen(input) != 0) 
 	// 	add_history(input);
@@ -21,18 +21,18 @@ char **get_input(char *input) {
     }
 
     char *separator = " ";
-    char *parsed;
-    int index = 0;
+    char *token;
+    int i = 0;
 
-    parsed = strtok(input, separator);
-    while (parsed != NULL) {
-        command[index] = parsed;
-        index++;
+    token = strtok(input, separator);
+    while (token != NULL) {
+        command[i] = token;
+        i++;
 
-        parsed = strtok(NULL, separator);
+        token = strtok(NULL, separator);
     }
 
-    command[index] = NULL;
+    command[i] = NULL;
     return command;
 }
 
@@ -50,7 +50,7 @@ int main()
 	// {
 	// 	printf("In child process\n");
 	// 	printf("\n");
-	// 	char *arr[]={"harsh","ajie",NULL};
+	// 	char *arr[]={"harsh","ajie","hahaha",NULL};
 	// 	execv("./try",arr);
 	// 	exit(1);
 	// }
@@ -68,13 +68,13 @@ int main()
 		printf("Harsh@terminal>>>");
 		//fgets(input,100,stdin);
 		gets(input);
-		comarray=get_input(input);
-		if(!comarray[0])
-		{
-			free(comarray);
-			printf("here");
-			continue;
-		}
+		comarray=get_array(input);
+		// if(!comarray[0])
+		// {
+		// 	free(comarray);
+		// 	printf("here");
+		// 	continue;
+		// }
 
 //internal commands:
 		if(strcmp("cd", comarray[0]) == 0 )
@@ -85,13 +85,30 @@ int main()
 
 		if(strcmp("echo", comarray[0]) == 0 )
 		{
-			int i=1;
-			while(comarray[i]!=NULL)
+			if(comarray[1]!=NULL)		//error handling for empty
 			{
-				printf("%s ",comarray[i]);
-				i++;
+				if(strcmp("-n",comarray[1])==0)
+				{
+					int i=2;
+					while(comarray[i]!=NULL)
+					{
+						printf("%s ",comarray[i]);
+						i++;
+					}
+
+				}
+
+				else
+				{
+					int i=1;
+					while(comarray[i]!=NULL)
+					{
+						printf("%s ",comarray[i]);
+						i++;
+					}
+					printf("\n");
+				}
 			}
-			printf("\n");
 		}
 
 		if(strcmp("history", comarray[0]) == 0 )
@@ -110,14 +127,51 @@ int main()
 
 		if(strcmp("exit", comarray[0]) == 0 )
 		{
+			printf("\n\t\tThank You!!!\n");
+			exit(0);
+			break;
+
+		}
+	//external commands:
+
+		if(strcmp("ls", comarray[0]) == 0 )
+		{
+			printf("\n\tThank You!!!\n");
+		}
+
+
+		if(strcmp("cat", comarray[0]) == 0 )
+		{
+			
+			
+		}
+
+
+		if(strcmp("date", comarray[0]) == 0 )
+		{
 			printf("\n\tThank You!!!\n");
 			exit(0);
 			break;
 
 		}
-//external commands:
 
-		//break;
+		if(strcmp("rm", comarray[0]) == 0 )
+		{
+			char *adde=(char *)malloc(500*sizeof(char));
+			getcwd(adde,500);
+			printf("%s \n",adde);
+		}
+
+
+		if(strcmp("mkdir", comarray[0]) == 0 )
+		{
+			printf("\n\tThank You!!!\n");
+			exit(0);
+			break;
+
+		}
+
+
 
 	}
 
