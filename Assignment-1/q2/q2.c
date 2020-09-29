@@ -60,17 +60,47 @@ int main()
 	// 	printf("\nChild complete\n");
 	// }
 
-	char input[100];
-	//char *input;
+	//char input[100];
+	char *input;
 	char **comarray;
+	char *currentpath=(char *)malloc(500*sizeof(char));
+
+	getcwd(currentpath,500);
+	char ls[500] = "/ls";
+	strcat(currentpath,ls);
+	strcpy(ls,currentpath);
+	
+	getcwd(currentpath,500);
+	char catadd[500] = "/cat";
+	strcat(currentpath,catadd);
+	strcpy(catadd,currentpath);
+
+	getcwd(currentpath,500);
+	char dadd[500] = "/date";
+	strcat(currentpath,dadd);
+	strcpy(dadd,currentpath);
+
+	getcwd(currentpath,500);
+	char runadd[500] = "/rm";
+	strcat(currentpath,runadd);
+	strcpy(runadd,currentpath);
+
+	getcwd(currentpath,500);
+	char mkdd[500] = "/mkdir";
+	strcat(currentpath,mkdd);
+	strcpy(mkdd,currentpath);
+
+	getcwd(currentpath,500);
+
+	//printf("%s",ls);
 	while(1)
 	{
 		printf("Harsh@terminal>>>");
-		//input = (char*)malloc(sizeof(char*)*100);
+		input = (char*)malloc(sizeof(char*)*100);
 		//fgets(input,100,stdin);
 		gets(input);
-		// if(input[0]=='\n')
-		// 	continue;
+		if(input[0]=='\n')
+			continue;
 		comarray=get_array(input);
 		// if(!comarray[0])
 		// {
@@ -82,8 +112,20 @@ int main()
 	//internal commands:
 		if(strcmp("cd", comarray[0]) == 0 )
 		{
+			if(comarray[1]==NULL)
+			chdir(getenv("HOME"));
+			else if (strcmp("~", comarray[1]) == 0 )
+			{
+				chdir(getenv("HOME"));
+			}
+			
 			//chdir("..");
-			chdir(comarray[1]);
+			else
+			{
+				chdir(comarray[1]);
+				//chdir(getenv("HOME"));
+			}
+			
 		}
 
 		if(strcmp("echo", comarray[0]) == 0 )
@@ -99,6 +141,22 @@ int main()
 						i++;
 					}
 
+				}
+
+				else if (strcmp("-E",comarray[1])==0)
+				{
+					int i=2;
+					while(comarray[i]!=NULL)
+					{
+						// for(int j=0;j<strlen(comarray[i]);j++)
+						// {
+						// 	//if(comarray[j][i]!='\\')
+						// 	printf("%s",comarray[j][i]);
+						// }
+						printf("%s ",comarray[i]);
+						i++;
+					}
+					printf("\n");
 				}
 
 				else
@@ -122,9 +180,27 @@ int main()
 
 		if(strcmp("pwd", comarray[0]) == 0 )
 		{
-			char *adde=(char *)malloc(500*sizeof(char));
-			getcwd(adde,500);
-			printf("%s \n",adde);
+			if(comarray[1]!=NULL)
+			{
+				if(strcmp("-P", comarray[1]) == 0 )
+				{
+					char *adde=(char *)malloc(500*sizeof(char));
+					getcwd(adde,500);
+					printf("%s \n",adde);
+				}
+
+				else if(strcmp("--help", comarray[1]) == 0 )
+				{
+					printf("pwd:\tPrint the name of the current working directory.\nOptions:\n-P\tprint the physical directory, without any symbolic links\n");
+				}
+			}
+			else
+			{
+				//printf("%s\n",getenv("PWD"));
+				char *adde=(char *)malloc(500*sizeof(char));
+				getcwd(adde,500);
+				printf("%s \n",adde);
+			}
 		}
 
 
@@ -140,7 +216,7 @@ int main()
 			break;
 
 		}
-	//external commands:
+	//external commands:--------------------------------------
 
 		if(strcmp("ls", comarray[0]) == 0 )
 		{
@@ -151,7 +227,8 @@ int main()
 			}
 			else if(pid ==0)
 			{
-				execv("./ls",comarray);
+				//execv("./ls",comarray);
+				execv(ls,comarray);
 			}
 			else
 			{
@@ -169,7 +246,8 @@ int main()
 			}
 			else if(pid ==0)
 			{
-				execv("./cat",comarray);
+				// execv("./cat",comarray);
+				execv(catadd,comarray);
 			}
 			else
 			{
@@ -188,7 +266,8 @@ int main()
 			}
 			else if(pid ==0)
 			{
-				execv("./date",comarray);
+				// execv("./date",comarray);
+				execv(dadd,comarray);
 			}
 			else
 			{
@@ -205,7 +284,8 @@ int main()
 			}
 			else if(pid ==0)
 			{
-				execv("./rm",comarray);
+				// execv("./rm",comarray);
+				execv(runadd,comarray);
 			}
 			else
 			{
@@ -223,7 +303,8 @@ int main()
 			}
 			else if(pid ==0)
 			{
-				execv("./mkdir",comarray);
+				// execv("./mkdir",comarray);
+				execv(mkdd,comarray);
 			}
 			else
 			{

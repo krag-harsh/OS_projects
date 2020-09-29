@@ -2,13 +2,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <dirent.h>
-//#include <sys/stat.h>
+// #include <sys/stat.h>
 #include <string.h>
 
 int main(int argc, char *argv[])
 {
     struct dirent *f;
 	DIR *d;
+    // struct  stat stats;
     char arr[1000];
     char pwd[1024];
     getcwd(pwd,1024);
@@ -41,11 +42,13 @@ int main(int argc, char *argv[])
 
         }
     }
-    else if (argc==1)
+    else if(argc==1)
     {
 
         while((f = readdir(d)) !=NULL)
         {
+            // sprintf(arr,"%s/%s",pwd,f->d_name);
+		    // stat(arr,&stats);
   
             printf(" %s ",f->d_name );
         }
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
         printf("\n");
         
     }
-    //system("dir");
+   // system("dir");
+  
     return 0;
 }
