@@ -69,6 +69,8 @@ int main()
 		//input = (char*)malloc(sizeof(char*)*100);
 		//fgets(input,100,stdin);
 		gets(input);
+		// if(input[0]=='\n')
+		// 	continue;
 		comarray=get_array(input);
 		// if(!comarray[0])
 		// {
@@ -77,7 +79,7 @@ int main()
 		// 	continue;
 		// }
 
-//internal commands:
+	//internal commands:
 		if(strcmp("cd", comarray[0]) == 0 )
 		{
 			//chdir("..");
@@ -128,7 +130,12 @@ int main()
 
 		if(strcmp("exit", comarray[0]) == 0 )
 		{
-			printf("\n\t\tThank You!!!\n");
+			if(comarray[1]!=NULL)
+			{
+				printf("exit:\n\tExit the shell\n");
+				continue;
+			}
+			printf("\n\t\tThank You!!!\n\n");
 			exit(0);
 			break;
 
