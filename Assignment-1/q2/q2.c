@@ -9,6 +9,7 @@
 #include <string.h>
 
 
+
 char **get_array(char *input) {
 
 	// if (strlen(input) != 0) 
@@ -91,6 +92,11 @@ int main()
 	strcpy(mkdd,currentpath);
 
 	getcwd(currentpath,500);
+	char hiaddress[500] = "/history.txt";
+	strcat(currentpath,hiaddress);
+	strcpy(hiaddress,currentpath);
+
+	getcwd(currentpath,500);
 
 	//printf("%s",ls);
 	while(1)
@@ -99,8 +105,25 @@ int main()
 		input = (char*)malloc(sizeof(char*)*100);
 		//fgets(input,100,stdin);
 		gets(input);
-		if(input[0]=='\n')
-			continue;
+		//if(input[0]=='\n')
+		if(strlen(input)==0)
+		continue;
+		
+
+		char *toadd=(char *)malloc(500*sizeof(char));
+		strcpy(toadd,input);
+
+		FILE *fptr;
+		// fptr=fopen("history.txt","a");
+		fptr=fopen(hiaddress,"a");
+		fputs(toadd,fptr);
+		fputs("\n",fptr);
+		fclose(fptr);
+
+		// int f=open("history.txt", O_WRONLY | O_APPEND);
+		// write(f,toadd,strlen(toadd));
+
+
 		comarray=get_array(input);
 		// if(!comarray[0])
 		// {
@@ -109,7 +132,7 @@ int main()
 		// 	continue;
 		// }
 
-	//internal commands:
+	//internal commands:--------------------------------------
 		if(strcmp("cd", comarray[0]) == 0 )
 		{
 			if(comarray[1]==NULL)
@@ -118,7 +141,10 @@ int main()
 			{
 				chdir(getenv("HOME"));
 			}
-			
+			else if (strcmp("--help", comarray[1]) == 0 )
+			{
+				printf("Change the shell working directory.\n");
+			}
 			//chdir("..");
 			else
 			{

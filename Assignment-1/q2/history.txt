@@ -1,0 +1,7 @@
+lets try now
+ls
+cd ~
+ls
+haha
+its working
+exit
