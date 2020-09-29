@@ -66,7 +66,8 @@ int main()
 	while(1)
 	{
 		printf("Harsh@terminal>>>");
-		// fgets(input,100,stdin);
+		//input = (char*)malloc(sizeof(char*)*100);
+		//fgets(input,100,stdin);
 		gets(input);
 		comarray=get_array(input);
 		// if(!comarray[0])
