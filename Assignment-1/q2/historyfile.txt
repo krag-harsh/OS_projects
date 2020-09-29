@@ -1,6 +1,11 @@
+history
 exit
 hi
 lets see
 history
 history -w
 exit
+hi
+lets see
+history
+history -w

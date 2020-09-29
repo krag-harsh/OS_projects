@@ -12,8 +12,6 @@
 
 char **get_array(char *input) {
 
-	// if (strlen(input) != 0) 
-	// 	add_history(input);
 
     char **command = malloc(10 * sizeof(char *));
     if (command == NULL) {
@@ -105,7 +103,6 @@ int main()
 		input = (char*)malloc(sizeof(char*)*100);
 		//fgets(input,100,stdin);
 		gets(input);
-		//if(input[0]=='\n')
 		if(strlen(input)==0)
 		continue;
 		
@@ -119,10 +116,6 @@ int main()
 		fputs(toadd,fptr);
 		fputs("\n",fptr);
 		fclose(fptr);
-
-		// int f=open("history.txt", O_WRONLY | O_APPEND);
-		// write(f,toadd,strlen(toadd));
-
 
 		comarray=get_array(input);
 		// if(!comarray[0])
@@ -149,7 +142,6 @@ int main()
 			else
 			{
 				chdir(comarray[1]);
-				//chdir(getenv("HOME"));
 			}
 			
 		}
@@ -200,7 +192,49 @@ int main()
 
 		if(strcmp("history", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
+			//printf("\n\t Working on this feature\n");
+			if(comarray[1]==NULL)
+			{
+				FILE* stream = fopen(hiaddress, "r");
+				char line[1024];
+				int count=1;
+				while (fgets(line, 1024, stream))
+				{
+					char* tmp = strdup(line);
+					printf("%d  %s",count,tmp);
+					count++;
+				}
+				fclose(stream);
+
+			}
+			else if (strcmp("-w", comarray[1]) == 0)
+			{
+				FILE *fptr1, *fptr2;
+				fptr1 = fopen(hiaddress,"r");
+				fptr2 = fopen("historyfile.txt","a");
+				char line[1024];
+				int count=1;
+				while (fgets(line, 1024, fptr1))
+				{
+					char* tmp = strdup(line);
+					//printf("%d  %s",count,tmp);
+					fprintf(fptr2,tmp);
+					count++;
+				}
+				fclose(fptr1);
+				fclose(fptr2);
+				
+			}
+			
+			else if (strcmp("-c", comarray[1]) == 0)
+			{
+				FILE *fptr;
+				fptr = fopen(hiaddress,"w");
+				fprintf(fptr,"");
+				fclose(fptr);
+
+			}
+			
 		}
 
 
