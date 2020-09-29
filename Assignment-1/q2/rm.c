@@ -13,16 +13,16 @@ int main(int argc, char *argv[])
     // }
 
 
-    for(int i=0;i<argc;i++)
-    {
-        int i=remove(argv[i]);
-        if(i!=0)
-        printf("unable to delete file %s",argv[i]);
-    }
+    // for(int i=0;i<argc;i++)
+    // {
+    //     int i=remove(argv[i]);
+    //     if(i!=0)
+    //     printf("unable to delete file %s",argv[i]);
+    // }
 
     if(remove("har")!=0)
     {
-        printf("\nunable to delete");
+        printf("\nunable to delete\n");
     }
     return 0;
 }

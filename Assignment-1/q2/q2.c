@@ -39,9 +39,8 @@ char **get_array(char *input) {
 
 int main()
 {
-	// pid_t pid;
+	pid_t pid;
 	// pid=fork();
-
 	// if(pid<0){
 	// 	fprintf(stderr, "Fork Filed");
 	// 	return 1;
@@ -62,11 +61,12 @@ int main()
 	// }
 
 	char input[100];
+	//char *input;
 	char **comarray;
 	while(1)
 	{
 		printf("Harsh@terminal>>>");
-		//fgets(input,100,stdin);
+		// fgets(input,100,stdin);
 		gets(input);
 		comarray=get_array(input);
 		// if(!comarray[0])
@@ -136,45 +136,96 @@ int main()
 
 		if(strcmp("ls", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
+			pid=fork();
+			if(pid<0){
+				fprintf(stderr, "Fork Filed");
+				return 1;
+			}
+			else if(pid ==0)
+			{
+				execv("./ls",comarray);
+			}
+			else
+			{
+				waitpid(-1, NULL , 0);
+			}
 		}
 
 
 		if(strcmp("cat", comarray[0]) == 0 )
 		{
-			
+			pid=fork();
+			if(pid<0){
+				fprintf(stderr, "Fork Filed");
+				return 1;
+			}
+			else if(pid ==0)
+			{
+				execv("./cat",comarray);
+			}
+			else
+			{
+				waitpid(-1, NULL , 0);
+			}
 			
 		}
 
 
 		if(strcmp("date", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
-			exit(0);
-			break;
-
+			pid=fork();
+			if(pid<0){
+				fprintf(stderr, "Fork Filed");
+				return 1;
+			}
+			else if(pid ==0)
+			{
+				execv("./date",comarray);
+			}
+			else
+			{
+				waitpid(-1, NULL , 0);
+			}
 		}
 
 		if(strcmp("rm", comarray[0]) == 0 )
 		{
-			char *adde=(char *)malloc(500*sizeof(char));
-			getcwd(adde,500);
-			printf("%s \n",adde);
+			pid=fork();
+			if(pid<0){
+				fprintf(stderr, "Fork Filed");
+				return 1;
+			}
+			else if(pid ==0)
+			{
+				execv("./rm",comarray);
+			}
+			else
+			{
+				waitpid(-1, NULL , 0);
+			}
 		}
 
 
 		if(strcmp("mkdir", comarray[0]) == 0 )
 		{
-			printf("\n\tThank You!!!\n");
-			exit(0);
-			break;
-
+			pid=fork();
+			if(pid<0){
+				fprintf(stderr, "Fork Filed");
+				return 1;
+			}
+			else if(pid ==0)
+			{
+				execv("./mkdir",comarray);
+			}
+			else
+			{
+				waitpid(-1, NULL , 0);
+			}
 		}
 
 
 
 	}
-
 
 	return 0;
 }
