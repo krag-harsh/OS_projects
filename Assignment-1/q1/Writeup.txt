@@ -1,0 +1,52 @@
+#Harsh Kumar Agarwal
+#2019423
+
+Working of program:
+
+we start with creating of new process using fork(explained later)
+the child process gets pid(process id) of 0
+we check for pid(if equals 0) we start the working of child prcess else go for parent process
+in parent process we wait for the child process to complete(using waitpid method)
+
+Child process:
+here we first open the file(file_modified.csv) then start reading it line by line
+inside the while loop, at every iteration tmp conatains a line of the file
+Now we start a new while loop here we read the line word by word(at every iteration token contains the word)
+we check this token if it is equal to character(A) or not
+if it is equal, we read the next 4 word convert them to integer, sum them find the average and print them
+once we are done with reading the file we exit the child process
+
+Parent process:
+Here we are waiting for the child process to get completed(using waitpid function)
+once the waiting is done, the rest of the steps are very similar to the child process
+here the only differece is, now we are searching for the Section B students
+
+After this our program terminates :)
+
+
+
+details of each system calls:---------
+
+fork() :It is used to create new process. It do not have any arguments. It passes child pid to the parent process, and the child have value 0
+
+waitpid() :It is used to wait for state changes in a child of the calling process, and obtain information about the child whose state has changed.
+            I have used it as waitpid(-1,NULL,0) , here -1 means wait for any child process.NULL is for proess and 0 is for options.
+
+exit() : this termiantes the calling process imediately.Here we can pass integer value which shows the status to the parent process.
+
+arguments passed:
+we only need the name of the file
+I edited the csv file (removed the commas at the end)
+
+
+expected outcomes:
+The student ID followed by the average marks- First for Section B(child process) then for Section A students
+
+
+As there are no user input and fixed file format, the chances of error are low.
+while creating fork process we are checking if the process is being created or not
+after reading of the file its important to free the pointer(other wise it may give error)
+while reading the next 4 subject marks we read first 3 follwed by the 4th otherwise it may give segmentation fault.
+
+
+
