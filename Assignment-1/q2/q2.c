@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
-//#include<readline/readline.h>
-#include<readline/readline.h> 
+//#include<readline/readline.h> 
 #include <sys/wait.h>
 #include <stdlib.h>
-#include <wait.h>
+//#include <wait.h>
 #include <string.h>
 
 
@@ -15,7 +14,7 @@ char **get_array(char *input) {
 
     char **command = malloc(10 * sizeof(char *));
     if (command == NULL) {
-        printf("malloc failed\n");
+        printf("allocating memory failed\n");
         exit(1);
     }
 
@@ -40,7 +39,6 @@ int main()
 {
 	pid_t pid;
 
-	//char input[100];
 	char *input;
 	char **comarray;
 	char *currentpath=(char *)malloc(500*sizeof(char));
@@ -77,7 +75,6 @@ int main()
 
 	getcwd(currentpath,500);
 
-	//printf("%s",ls);
 	while(1)
 	{
 		printf("Harsh@terminal>>>");
@@ -92,7 +89,6 @@ int main()
 		strcpy(toadd,input);
 
 		FILE *fptr;
-		// fptr=fopen("history.txt","a");
 		fptr=fopen(hiaddress,"a");
 		fputs(toadd,fptr);
 		fputs("\n",fptr);
@@ -112,7 +108,12 @@ int main()
 			}
 			else if (strcmp("--help", comarray[1]) == 0 )
 			{
-				printf("Change the shell working directory.\n");
+				printf("Change the shell working directory.\n\t~  :goes to the home directory\n\t-P  :use physical directory without using symbolic link");
+			}
+			else if (strcmp("-P", comarray[1]) == 0 )
+			{
+				if(comarray[2]!=NULL)		//handling of error
+				chdir(comarray[2]);
 			}
 			//chdir("..");
 			else
@@ -244,7 +245,7 @@ int main()
 		{
 			if(comarray[1]!=NULL)
 			{
-				printf("exit:\n\tExit the shell\n");
+				printf("exit:\n\tThis is command is used to Exit the shell version 1.0\n");
 				continue;
 			}
 			printf("\n\t\tThank You!!!\n\n");

@@ -1,0 +1,84 @@
+#Harsh Kumar Agarwal
+#2019423
+
+WORKING:
+we start with a infinite loop
+inside we take input(these are the commands that we are entering)
+we made a function which take this input and returns and array of strings
+this array contains the words of the input string
+now we check the first word with the specific commands we are going to handle 
+as we get the word relevant actions are taken inside the if-else block
+
+
+ERRORS HANDLED:
+-I have used gets() instead of fgets() as gets dont read \n or the enter key which we type while entering the input
+-I was getting error while using external commands once i switched from one directory to other
+ later i realised that while calling the external commands i was not using fixed location
+ therefore i added fixed path before the starting of while loop.
+-On entering enter i my code was getting dumbed , i checked for the input lenght and corrected it.
+-while calling the execv command we need to enter array ending with NULL, i was making a mistake there later corrected it.
+
+
+
+OPTIONS:
+INTERNAL COMMANDS:
+cd:  --help :print the details which will help you in understanding the function of cd
+        ~  :goes to the home directory
+       -P  :use physical directory without using symbolic link
+
+       it will execute only if we have any value with -P option.without anyoption it will go to home directory
+
+echo: -n :do not append a newline
+      -E :explicitly suppress interpretation of backslash escapes
+
+      if nothing is provided it will ignore it.With any corner case it should work fine.
+
+history: -w :write the current history to the history file
+         -c :clear the history list by deleting all of the entries
+
+         if anything other than the options provided is given it will ignore them
+
+pwd: -P     :print the physical directory, without any symbolic links
+     --help :print the details which will help you in understanding the function of pwd
+
+     if any option is not matched it will ignore it.With any corner case it should work fine.
+
+exit: --help :print the details which will help you in understanding the exit command
+
+EXTERNAL COMMANDS:
+ls: -1 : list one file per line
+    -i : print the index number of each file
+
+    any corner case it should work fine, it will ignore any other option other than the options provided.
+
+cat: -E :display $ at end of each line
+     -n :number all output lines
+
+     it will ignore any other option other than the options provided.
+
+date: -R :output date and time in RFC 5322 format.
+            Example: Mon, 14 Aug 2006 02:34:56 -0600
+      -u :print or set Coordinated Universal Time (UTC)
+
+      it will ignore any option other than the options provided. if more words are provided will give appropriate message.
+
+rm:  -i : prompt before every removal
+     -v : explain what is being done
+
+     it will ignore any option other than the options provided.
+
+mkdir: -v :print a message for each created directory
+       -m :set file mode 
+
+       it will ignore any option other than the options provided.
+
+
+ASSUMPTIONS:
+-on entering blank or any irrelevant command my shell will not show error, it will simply continue.
+-Instead of storing the history in MM i am storing it in secondary memory.
+as i notices while using the teminal older history is also shown even after closing of terminal.
+-Command mkdir cannot be used to make multiple folder with any options.
+-Invalid options most of the times are being ignored.
+
+
+test cases are stored in historyfile.txt

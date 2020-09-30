@@ -1,49 +1,20 @@
-history
 exit
-hi
-lets see
-history
-history -w
+pwd
 exit
-hi
-lets see
-history
-history -w
-exit
-hi
-lets see
-history
-history -w
-exit
-hi
 ls
-cd backup0
+ls -1
+exit
+cd ~
 ls
-cd ..
-ls
+pwd
+echo ls.c
+echo -n ls.c
+ls -1
+ls -i
 date
-cat try.c
-history
-exit
-hi
-mkdir tf1 tf2 tf3 tf4 tf5
-mkdir -v tf7
-exit
-rm t1 t2 t3
-ls
-rm -v t4 t5
-rm -i t6 t7
-y
-exit
-rm -i t6 t7 t8
-exit
-rm -i t5 t7
-exit
-hi
-lets try
-rm -i t7 t6 t5
-exit
-rm -i t7 t6 t5
-exit
+date -R
+date u
+date -u
+mkdir folder1 folder2
 history
 history -w
