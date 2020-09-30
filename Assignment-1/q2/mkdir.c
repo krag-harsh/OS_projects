@@ -20,20 +20,29 @@ int main(int argc, char *argv[])
     // printf("unable to create folder");
 
     //system("dir");
+
+
     if(argc==3)
     {
         if(strcmp(argv[1],"-v")==0)
         {
             if(mkdir(argv[2],0700)==-1)
-            {
-                printf("unable to create folder");
-            }
+            printf("unable to create folder");
             else 
-            {
-                printf("Foder created %s ",argv[2]);
-            }
+            printf("Foder created %s ",argv[2]);
             
         }
+
+        else
+        {
+            if(mkdir(argv[1],0700)==-1)
+            printf("unable to create folder %s\n",argv[1]);
+
+            if(mkdir(argv[2],0700)==-1)
+            printf("unable to create folder %s\n",argv[2]);
+            
+        }
+        
     }
     else if (argc==4)
     {
@@ -41,11 +50,51 @@ int main(int argc, char *argv[])
         {
             mkdir(argv[3],atoi(argv[2]));
         }
+
+        else if(strcmp(argv[1],"-v")!=0)
+        {
+            if(mkdir(argv[1],0700)==-1)
+            printf("unable to create folder %s\n",argv[1]);
+
+            if(mkdir(argv[2],0700)==-1)
+            printf("unable to create folder %s\n",argv[2]);
+
+            if(mkdir(argv[3],0700)==-1)
+            printf("unable to create folder %s\n",argv[3]);
+
+        }
+
+        else if(strcmp(argv[1],"-v")==0)
+        {
+            if(mkdir(argv[2],0700)==-1)
+            printf("unable to create folder");
+            else 
+            printf("Foder created %s ",argv[2]);
+
+            if(mkdir(argv[3],0700)==-1)
+            printf("unable to create folder");
+            else 
+            printf("Foder created %s ",argv[3]);
+
+        }
+
     }
     else if(argc==2)
     {
         if(mkdir(argv[1],0700)==-1)
         printf("unable to create folder");
     }
+
+    else
+    {
+        for(int i=1;i<argc;i++)
+        {
+            if(mkdir(argv[i],0700)==-1)
+            printf("unable to create folder %s\n",argv[i]);
+        }
+    }
+    
+
+
     return 0;
 }

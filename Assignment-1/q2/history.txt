@@ -1,6 +1,2 @@
-exit
-hi
-lets see
-history
-history -w
+history 
 exit

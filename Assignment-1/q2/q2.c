@@ -39,25 +39,6 @@ char **get_array(char *input) {
 int main()
 {
 	pid_t pid;
-	// pid=fork();
-	// if(pid<0){
-	// 	fprintf(stderr, "Fork Filed");
-	// 	return 1;
-	// }
-	// else if(pid ==0)
-	// {
-	// 	printf("In child process\n");
-	// 	printf("\n");
-	// 	char *arr[]={"harsh","ajie","hahaha",NULL};
-	// 	execv("./try",arr);
-	// 	exit(1);
-	// }
-	// else
-	// {
-	// 	//waitpid(-1, NULL , 0);
-	// 	wait(NULL);	
-	// 	printf("\nChild complete\n");
-	// }
 
 	//char input[100];
 	char *input;
@@ -118,12 +99,7 @@ int main()
 		fclose(fptr);
 
 		comarray=get_array(input);
-		// if(!comarray[0])
-		// {
-		// 	free(comarray);
-		// 	printf("here");
-		// 	continue;
-		// }
+
 
 	//internal commands:--------------------------------------
 		if(strcmp("cd", comarray[0]) == 0 )
