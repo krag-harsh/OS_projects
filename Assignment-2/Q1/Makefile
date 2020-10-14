@@ -5,8 +5,8 @@ run1: compile1
 # 	 Execute part 1 here
 
 compile2:
-# 	Compile your code for second part here
+	gcc Q1_part2.c -lpthread
 
 run2: compile2
-#	Execute part 2 here
+	./a
 
