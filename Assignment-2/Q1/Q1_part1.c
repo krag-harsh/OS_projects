@@ -1,5 +1,5 @@
-
-
+/* Name: Harsh Kumar Agarwal
+   Roll_Number: 2019423 */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -11,11 +11,8 @@ int n=10;      //global variable
 
 int main()
 {
-   printf("hi\n");
    pid_t pid;
 	pid=fork();
-
-   // pid_t pid=fork();
 
 	if(pid<0){
 		fprintf(stderr, "Ford Filed");
@@ -23,24 +20,28 @@ int main()
 	else if(pid ==0)
 	{
 		printf("In child process\n");
-      while(n>-90)
+      //while(n>-90)
+      for(int i=0;i<90;i++)
       {
          n--;
-         printf("%d\n",n);
+         //printf("%d\n",n);
       }
+      printf("Value of n inside child process after reducing 90: %d\n\n", n);
    }
    else
    {
       waitpid(-1, NULL , 0);
       printf("Inside parent process\n");
-      while (n<100)
+      //while (n<100)
+      for(int i=0;i<90;i++)
       {
          n++;
-         printf("%d\n",n);
+         //printf("%d\n",n);
       }
+
+      printf("Final value of n inside after parent process after increasing 90: %d\n", n);
    }
 
 
    return 0;
 }
-   
