@@ -8,7 +8,6 @@
 #include <linux/mm.h>
 #include <linux/errno.h>
 
-//asmlinkage long __x64_sys_rtnice(int pid, long rtval) 
 SYSCALL_DEFINE2(rtnice , int, pid, long, rtval)
 {
 	printk("passed values:\npid : %d \nrtval : %ld\n",pid,rtval);
