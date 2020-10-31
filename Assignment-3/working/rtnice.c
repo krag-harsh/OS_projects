@@ -8,13 +8,14 @@
 #include <linux/mm.h>
 #include <linux/errno.h>
 
-asmlinkage long sys_rtnice(int pid, long rtval) 
+//asmlinkage long __x64_sys_rtnice(int pid, long rtval) 
+SYSCALL_DEFINE2(rtnice , int, pid, long, rtval)
 {
 	printk("passed values:\npid : %d \nrtval : %ld\n",pid,rtval);
 
+	unsigned long long rtvalstore=rtval*1000000000;
 	struct task_struct *task;
 	int flag=0;
-	unsigned long long rtvalstore=rtval*1000000000;
 
 	if (rtval < 0 || pid<0 || pid>32768)
 		return -EINVAL;
@@ -25,7 +26,7 @@ asmlinkage long sys_rtnice(int pid, long rtval)
 		{
 			flag = 1;
 			task->se.rtnice = rtvalstore;
-			printk("rtnice value changed to: %ld\n", rtvalstore);
+			printk("rtnice value changed to: %lld\n", rtvalstore);
 			break;
 		}
 	}
@@ -37,6 +38,7 @@ asmlinkage long sys_rtnice(int pid, long rtval)
 	}
 
 	printk("\nat the end of the rtnice code\n");
+	
 	return 0;
 }
 

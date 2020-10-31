@@ -33,9 +33,9 @@ static void update_curr(struct cfs_rq *cfs_rq)
 		curr->vruntime += calc_delta_fair(delta_exec, curr);
 	else
 	{
-		if(curr->sr_prio > delta_exec)
-			curr->sr_prio-=delta_exec;
+		if(curr->rtnice > delta_exec)
+			curr->rtnice-=delta_exec;
 		else
-			curr->sr_prio = 0;
+			curr->rtnice = 0;
 	}
 }
