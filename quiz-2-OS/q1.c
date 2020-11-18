@@ -8,28 +8,17 @@
 int main() 
 { 
 
-	int fd1[2]; // Used to store two ends of first pipe 
-	int fd2[2]; // Used to store two ends of second pipe 
+	int fd1[2]; 
+	int fd2[2]; 
 
-	char input_str[100]; 
+	char strinput[500]; 
 	pid_t p; 
-
-	if (pipe(fd1)==-1) 
-	{ 
-		fprintf(stderr, "Pipe Failed" ); 
-		return 1; 
-	} 
-	
-	if (pipe(fd2)==-1) 
-	{ 
-		fprintf(stderr, "Pipe Failed" ); 
-		return 1; 
-	} 
+	pipe(fd1);
+	pipe(fd2);
  
-	fgets(input_str, 100, stdin); 
-   	//printf("String inputed: %s\n", input_str); 
+	fgets(strinput, 500, stdin); 
+   	//printf("entered string: %s\n", strinput); 
 	p = fork(); 
-
 	if (p < 0) 
 	{ 
 		fprintf(stderr, "fork Failed" ); 
@@ -39,64 +28,49 @@ int main()
 	// Parent process 
 	else if (p > 0) 
 	{ 
-		char concat_str[100]; 
-
-		close(fd1[0]); // Close reading end of first pipe 
-
-		// Write input string and close writing end of first 
-		// pipe. 
-		write(fd1[1], input_str, strlen(input_str)+1); 
+		char finalstr[500]; 
+		close(fd1[0]); 
+		write(fd1[1], strinput, strlen(strinput)+1); 
 		close(fd1[1]); 
 
-		// Wait for child to send a string 
-		wait(NULL); 
+		wait(NULL); 	//wait for child process to complete
 
-		close(fd2[1]); // Close writing end of second pipe 
-
-		// Read string from child, print it and close 
-		// reading end. 
-		read(fd2[0], concat_str, 100); 
-		printf("%s\n", concat_str); 
+		close(fd2[1]);
+		read(fd2[0], finalstr, 500); 		//read string from child
+		printf("%s\n", finalstr); 
 		close(fd2[0]); 
 	} 
 
 	// child process 
 	else
 	{ 
-		close(fd1[1]); // Close writing end of first pipe 
+		close(fd1[1]);
 
-		// Read a string using first pipe 
-		char concat_str[100]; 
-		read(fd1[0], concat_str, 100); 
-
-
-		int k = strlen(concat_str); 
-	
-
-		for (int i = 0; concat_str[i]!='\0'; i++) 
+		char finalstr[500]; 
+		read(fd1[0], finalstr, 500); //read the sent data
+		int k = strlen(finalstr); 
+		for (int i = 0; finalstr[i]!='\0'; i++) 
 		{
-			if(concat_str[i]=='\\' && concat_str[i+1]!='\0')
+			if(finalstr[i]=='\\' && finalstr[i+1]!='\0')
 			{
-				if(concat_str[i+1]=='a' || concat_str[i+1]=='b' || concat_str[i+1]=='f' || concat_str[i+1]=='n' || concat_str[i+1]=='r' || concat_str[i+1]=='t' || concat_str[i+1]=='v')
+				if(finalstr[i+1]=='a' || finalstr[i+1]=='b' || finalstr[i+1]=='f' || finalstr[i+1]=='n' || finalstr[i+1]=='r' || finalstr[i+1]=='t' || finalstr[i+1]=='v')
 				{
 					i++;
 					continue;
 				}
 			}
-			else if(concat_str[i] >= 'a' && concat_str[i] <= 'z') 
+			else if(finalstr[i] >= 'a' && finalstr[i] <= 'z') 
 			{
-				concat_str[i] = concat_str[i]-32;
+				finalstr[i] = finalstr[i]-32;
 			}
 		}
 
-		concat_str[k] = '\0'; // string ends with '\0' 
+		finalstr[k] = '\0';
 
-		// Close both reading ends 
 		close(fd1[0]); 
 		close(fd2[0]); 
 
-		// Write concatenated string and close writing end 
-		write(fd2[1], concat_str, strlen(concat_str)+1); 
+		write(fd2[1], finalstr, strlen(finalstr)+1); 
 		close(fd2[1]); 
 
 		exit(0); 
