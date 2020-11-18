@@ -1,79 +1,77 @@
-#include<stdio.h>
-#include<pthread.h>
-#include<stdlib.h>
-#include<semaphore.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-int readCount;
-sem_t s, mSem;	
+/*
+This program provides a possible solution for first readers writers problem using mutex and semaphore.
+I have used 5 readers and 3 producers to demonstrate the solution. You can always play with these values.
+*/
 
-void* readerMethod(void* data)
-{
-	FILE* fp;
-	char ch;	
-	do
-	{
-		sem_wait(&s);
-		readCount++;
-		if(readCount==1)
-			sem_wait(&mSem);
-		sem_post(&s);
-		
-		fp=fopen("abc.txt", "r");
-		ch=fgetc(fp);	
-		while(!feof(fp))
-		{
-			printf("%c",ch);
-			ch=fgetc(fp);
-		}
-		printf("\nReader Completed Execution!!\n");
-		fclose(fp);
-		
-		sem_wait(&s);
-		readCount--;
-		if(readCount==0)
-			sem_post(&mSem);
-		sem_post(&s);
-	}while(readCount!=0);
+sem_t wrt;
+pthread_mutex_t mutex;
+int counting = 1;
+int numreader = 0;
+
+void *writer(void *wno)
+{   
+    sem_wait(&wrt);
+    // counting = counting*2;
+	counting++;
+	sleep(1);
+    printf("Writer %d modified counting to %d\n",(*((int *)wno)),counting);
+    sem_post(&wrt);
+
+}
+void *reader(void *rno)
+{   
+    // Reader acquire the lock before modifying numreader
+    pthread_mutex_lock(&mutex);
+    numreader++;
+    if(numreader == 1) {
+        sem_wait(&wrt); // If this id the first reader, then it will block the writer
+    }
+    pthread_mutex_unlock(&mutex);
+    // Reading Section
+	sleep(1);
+    printf("Reader %d: read counting as %d\n",*((int *)rno),counting);
+
+    // Reader acquire the lock before modifying numreader
+    pthread_mutex_lock(&mutex);
+    numreader--;
+    if(numreader == 0) {
+        sem_post(&wrt); // If this is the last reader, it will wake up the writer.
+    }
+    pthread_mutex_unlock(&mutex);
 }
 
-void* writerMethod(void* data)
-{
-	FILE *fp;
-	char string[20];
-	sem_wait(&mSem);
-	
-	printf("\nEnter the Text: ");
-	scanf("%s", string);
-		
-	fp=fopen("abc.txt", "a");
-	fprintf(fp, "%s", string);
-	fclose(fp);		
-	printf("\nWriter Has Written!!\n");	
-	sem_post(&mSem);
-}
-		
 int main()
-{
-	int r, i, n;
-	FILE *fp;
-	pthread_t writer, reader[10];
-	sem_init(&s, 0, 1);
-	sem_init(&mSem, 0, 1);
-	
-	printf("\nEnter The Number of Readers: ");
-	scanf("%d", &n);
+{   
 
-	fp=fopen("abc.txt","a");
-	fclose(fp);
-	
-	readCount=0;	
-	
-	for(i=0;i<n;i++)
-		pthread_create(&reader[i], NULL,readerMethod , NULL); 
-	pthread_create(&writer, NULL, writerMethod ,NULL); 
-	
-	for(i=0; i<n;i++)
-		pthread_join(reader[i], NULL);
-	pthread_join(writer, NULL);
-	return 0;
+    pthread_t read[5],write[3];
+    pthread_mutex_init(&mutex, NULL);
+    sem_init(&wrt,0,1);
+
+    int a[5] = {1,2,3,4,5}; //Just used for numbering the producer and consumer
+
+    for(int i = 0; i < 5; i++) {
+        pthread_create(&read[i], NULL, (void *)reader, (void *)&a[i]);
+    }
+    for(int i = 0; i < 3; i++) {
+        pthread_create(&write[i], NULL, (void *)writer, (void *)&a[i]);
+    }
+
+    for(int i = 0; i < 5; i++) {
+        pthread_join(read[i], NULL);
+    }
+    for(int i = 0; i < 3; i++) {
+        pthread_join(write[i], NULL);
+    }
+
+    pthread_mutex_destroy(&mutex);
+    sem_destroy(&wrt);
+
+    return 0;
+    
 }
