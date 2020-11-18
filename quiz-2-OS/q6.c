@@ -1,52 +1,48 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<pthread.h>
-#include<semaphore.h>
-#include<unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 sem_t room;
-sem_t chopstick[5];
+sem_t spoon[5];
 
-// void * philosopher(void *);
-
-void * philosopher(void * num)
+void *philosopher(void * num)
 {
-	int phil=*(int *)num;
+	int phphernum=*(int *)num;
 
-	if(phil==4)
+	if(phphernum==4)		//the last philosopher first takes spoon on right, this will avoid anytype of deadlock
 	{
 		sem_wait(&room);
-		//printf("Philosopher %d has entered room",phil);
-		sem_wait(&chopstick[(phil+1)%5]);
-		printf("P%d received F%d\n",phil,phil);
-		sem_wait(&chopstick[phil]);
-		printf("P%d received F%d and F%d\n",phil,phil,(phil+1)%5);
+		sem_wait(&spoon[(phphernum+1)%5]);
+		printf("P%d receives F%d\n",phphernum,phphernum);
+		sem_wait(&spoon[phphernum]);
+		printf("P%d receives F%d,F%d\n",phphernum,phphernum,(phphernum+1)%5);
 
-		// eat(phil);
-		printf("Philosopher %d is eating\n",phil);
+		printf("P%d is eating\n",phphernum);
 		sleep(2);
-		printf("Philosopher %d has finished eating\n",phil);
+		// printf("phphernumosopher %d has finished eating\n",phphernum);
 
-		sem_post(&chopstick[phil]);
-		sem_post(&chopstick[(phil+1)%5]);
+		sem_post(&spoon[phphernum]);
+		sem_post(&spoon[(phphernum+1)%5]);
+		printf("P%d has finished eating and kept back F%d,F%d\n",phphernum,phphernum,(phphernum+1)%5);
 		sem_post(&room);
 	}
 	else
 	{
 		sem_wait(&room);
-		// printf("Philosopher %d has entered room",phil);
-		sem_wait(&chopstick[phil]);
-		printf("P%d received F%d\n",phil,phil);
-		sem_wait(&chopstick[(phil+1)%5]);
-		printf("P%d received F%d and F%d\n",phil,phil,(phil+1)%5);
+		sem_wait(&spoon[phphernum]);
+		printf("P%d receives F%d\n",phphernum,phphernum);
+		sem_wait(&spoon[(phphernum+1)%5]);
+		printf("P%d receives F%d,F%d\n",phphernum,phphernum,(phphernum+1)%5);
 
-		// eat(phil);
-		printf("Philosopher %d is eating\n",phil);
+		printf("P%d is eating\n",phphernum);
 		sleep(2);
-		printf("Philosopher %d has finished eating\n",phil);
+		// printf("phphernumosopher %d has finished eating\n",phphernum);
 
-		sem_post(&chopstick[(phil+1)%5]);
-		sem_post(&chopstick[phil]);
+		sem_post(&spoon[(phphernum+1)%5]);
+		sem_post(&spoon[phphernum]);
+		printf("P%d has finished eating and kept back F%d,F%d\n",phphernum,phphernum,(phphernum+1)%5);
 		sem_post(&room);
 	}
 
@@ -61,14 +57,18 @@ int main()
 	sem_init(&room,0,4);
 	
 	for(i=0;i<5;i++)
-		sem_init(&chopstick[i],0,1);
+		sem_init(&spoon[i],0,1);
 		
-	for(i=0;i<5;i++){
+	for(i=0;i<5;i++)
+	{
 		a[i]=i;
 		pthread_create(&tid[i],NULL,philosopher,(void *)&a[i]);
 	}
+
 	for(i=0;i<5;i++)
 		pthread_join(tid[i],NULL);
 
-	printf("All the professor have eaten successfully\n");
+	printf("All the professor have eaten once successfully\n");
+
+	return 0;
 }
