@@ -71,9 +71,19 @@ int main()
 
 
 		int k = strlen(concat_str); 
+	
+
 		for (int i = 0; concat_str[i]!='\0'; i++) 
 		{
-			if(concat_str[i] >= 'a' && concat_str[i] <= 'z') 
+			if(concat_str[i]=='\\' && concat_str[i+1]!='\0')
+			{
+				if(concat_str[i+1]=='a' || concat_str[i+1]=='b' || concat_str[i+1]=='f' || concat_str[i+1]=='n' || concat_str[i+1]=='r' || concat_str[i+1]=='t' || concat_str[i+1]=='v')
+				{
+					i++;
+					continue;
+				}
+			}
+			else if(concat_str[i] >= 'a' && concat_str[i] <= 'z') 
 			{
 				concat_str[i] = concat_str[i]-32;
 			}
