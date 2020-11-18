@@ -1,55 +1,47 @@
-/* Filename: msgq_send.c */
-#include <stdio.h>
+// C Program for Message Queue (Writer Process) 
+#include <stdio.h> 
+#include <sys/ipc.h> 
+#include <sys/msg.h> 
 #include <string.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 
-#define PERMS 0644
-struct my_msgbuf {
-   long mtype;
-   char mtext[200];
-};
 
-int main(void) {
-   struct my_msgbuf buf;
-   int msqid;
-   int len;
-   key_t key;
-   system("touch msgq.txt");
-   
-   if ((key = ftok("msgq.txt", 'B')) == -1) {
-      perror("ftok");
-      exit(1);
+// structure for message queue 
+struct mesg_buffer { 
+	long mesg_type; 
+	char mesg_text[100]; 
+} message; 
+
+int main() 
+{ 
+	key_t key; 
+	int msgid; 
+
+	// ftok to generate unique key 
+	key = ftok("progfile", 65); 
+
+	// msgget creates a message queue 
+	// and returns identifier 
+	msgid = msgget(key, 0666 | IPC_CREAT); 
+	message.mesg_type = 1; 
+
+
+   FILE *fp = fopen("para2.txt","r");
+   char chbuf[100];
+   while(fscanf(fp, "%s", chbuf) != EOF )
+   {
+      strcpy(message.mesg_text,chbuf);
+      int len = strlen(message.mesg_text);
+
+      msgsnd(msgid, &message, sizeof(message), 0); 
+	   printf("Data send is : %s \n", message.mesg_text); 
    }
    
-   if ((msqid = msgget(key, PERMS | IPC_CREAT)) == -1) {
-      perror("msgget");
-      exit(1);
-   }
-   printf("message queue: ready to send messages.\n");
-   printf("Enter lines of text, ^D to quit:\n");
-   buf.mtype = 1; /* we don't really care in this case */
-   
-   while(fgets(buf.mtext, sizeof buf.mtext, stdin) != NULL) {
-      len = strlen(buf.mtext);
-      /* remove newline at end, if it exists */
-      if (buf.mtext[len-1] == '\n') buf.mtext[len-1] = '\0';
-      if (msgsnd(msqid, &buf, len+1, 0) == -1) /* +1 for '\0' */
-      perror("msgsnd");
-   }
-   strcpy(buf.mtext, "end");
-   len = strlen(buf.mtext);
-   if (msgsnd(msqid, &buf, len+1, 0) == -1) /* +1 for '\0' */
-   perror("msgsnd");
-   
-   if (msgctl(msqid, IPC_RMID, NULL) == -1) {
-      perror("msgctl");
-      exit(1);
-   }
-   printf("message queue: done sending messages.\n");
-   return 0;
-}
+   strcpy(message.mesg_text,"\n\n");
+   msgsnd(msgid, &message, sizeof(message), 0); 
+   printf("Data send is : %s \n", message.mesg_text);
+
+	return 0; 
+} 
+
+
