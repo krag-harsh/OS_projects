@@ -15,11 +15,13 @@
 int main() { 
 	int sockfd; 
 	char buffer[MAXLINE]; 
-	char *hello = "Hello from client"; 
+	//char *hello = "Hello from client"; 
+	char hello[100];
 	struct sockaddr_in	 servaddr; 
 
 	// Creating socket file descriptor 
-	if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+	if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) 
+	{ 
 		perror("socket creation failed"); 
 		exit(EXIT_FAILURE); 
 	} 
@@ -33,16 +35,21 @@ int main() {
 	
 	int n, len; 
 	
-	sendto(sockfd, (const char *)hello, strlen(hello), 
-		MSG_CONFIRM, (const struct sockaddr *) &servaddr, 
-			sizeof(servaddr)); 
-	printf("Hello message sent.\n"); 
-		
-	n = recvfrom(sockfd, (char *)buffer, MAXLINE, 
-				MSG_WAITALL, (struct sockaddr *) &servaddr, 
-				&len); 
-	buffer[n] = '\0'; 
-	printf("Server : %s\n", buffer); 
+	FILE *fp = fopen("para2.txt","r");
+	char chbuf[100];
+	while(fscanf(fp, "%s", chbuf) != EOF )
+	{
+		strcpy(hello,chbuf);
+		//int len = strlen(hello);
+		sendto(sockfd, (const char *)hello, strlen(hello), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+		printf("Data send is : %s \n", hello); 
+	}
+
+	strcpy(hello,"\n\n");
+	sendto(sockfd, (const char *)hello, strlen(hello), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+	printf("Data send is : %s \n", hello);
+
+
 
 	close(sockfd); 
 	return 0; 

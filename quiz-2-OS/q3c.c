@@ -15,7 +15,6 @@
 int main() { 
 	int sockfd; 
 	char buffer[MAXLINE]; 
-	char *hello = "Hello from server"; 
 	struct sockaddr_in servaddr, cliaddr; 
 	
 	// Creating socket file descriptor 
@@ -33,8 +32,7 @@ int main() {
 	servaddr.sin_port = htons(PORT); 
 	
 	// Bind the socket with the server address 
-	if ( bind(sockfd, (const struct sockaddr *)&servaddr, 
-			sizeof(servaddr)) < 0 ) 
+	if ( bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0 ) 
 	{ 
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
@@ -44,15 +42,21 @@ int main() {
 
 	len = sizeof(cliaddr); //len is value/resuslt 
 
-	n = recvfrom(sockfd, (char *)buffer, MAXLINE, 
-				MSG_WAITALL, ( struct sockaddr *) &cliaddr, 
-				&len); 
-	buffer[n] = '\0'; 
-	printf("Client : %s\n", buffer); 
-	sendto(sockfd, (const char *)hello, strlen(hello), 
-		MSG_CONFIRM, (const struct sockaddr *) &cliaddr, 
-			len); 
-	printf("Hello message sent.\n"); 
+	int countoffile=0;
+
+	for(;;)
+	{
+		n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, ( struct sockaddr *) &cliaddr, &len); 
+		buffer[n] = '\0'; 
+		printf("%s ", buffer); 
+
+		int toend = strcmp(buffer,"\n\n");
+		if (toend == 0)
+		countoffile++;
+		if(countoffile>1)
+		break;
+		
+	}
 	
 	return 0; 
 } 
