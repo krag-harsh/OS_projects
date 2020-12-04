@@ -16,11 +16,12 @@ struct my_semaphore{
 
 // All the methods for my_semaphore struct only
 // This will initialize the semaphore by initializing 
-void sem_INIT(struct my_semaphore *sem, int value){
-	pthread_mutex_init(&sem->mutex, NULL);			
-	pthread_cond_init(&sem->cond, NULL);
-	sem->val = value;
-}
+
+// void sem_INIT(struct my_semaphore *sem, int value){
+// 	pthread_mutex_init(&sem->mutex, NULL);			
+// 	pthread_cond_init(&sem->cond, NULL);
+// 	sem->val = value;
+// }
 
 void wait(struct my_semaphore *sem){
 	pthread_mutex_lock(&sem->mutex);
@@ -96,12 +97,25 @@ int main(int argc, char const *argv[])
 	// int philosophers[numPhilo];
 
 	//  In order to avoid deadlocks, n-1 philosophers should be allowed in a room at once
-	sem_INIT(&room, numPhilo-1);
-	// A pair of bowl is needed for eating and when eating is done both the bowls are left
-	sem_INIT(&bowl, 1);
+	// sem_INIT(&room, numPhilo-1);
+
+	pthread_mutex_init(&(&room)->mutex, NULL);			
+	pthread_cond_init(&(&room)->cond, NULL);
+	(&room)->val = numPhilo-1;
+
+	// A pair of bowl is needed for eating and when eating is done both the bowls are left therefore we are creating a single bowl.under the assumption that they pick both bowl very fast.
+	// sem_INIT(&bowl, 1);
+	pthread_mutex_init(&(&bowl)->mutex, NULL);			
+	pthread_cond_init(&(&bowl)->cond, NULL);
+	(&bowl)->val = 1;
+
 
 	for(int i=0; i<numPhilo; i++){
-		sem_INIT(&forks[i],1);
+		// sem_INIT(&forks[i],1);
+		pthread_mutex_init(&(&forks[i])->mutex, NULL);
+		pthread_cond_init(&(&forks[i])->cond, NULL);
+		(&forks[i])->val = 1;
+
 		helper[i].helper_fork = &forks[i];
 		helper[i].helper_forknext = &forks[(i+1)%numPhilo];
 		helper[i].helper_bowl = &bowl;
