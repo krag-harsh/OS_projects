@@ -7,40 +7,38 @@
 #include<unistd.h>
 
 int NumPhil;		//  creating the number of philosopher as global variable
-int spaceleft=1;
+// int spaceleft=1;
 
 struct my_semaphore
 {
 	pthread_mutex_t mutex;		//mutex lock
 	pthread_cond_t cond;		//condition variable
-	int val;
+	int val;				
 };
 
 int wait(struct my_semaphore *sem)		//our own wait function(without blocking)
 {
-	pthread_mutex_lock(&sem->mutex);		//locks so that the part of the code cannot be accessed by multiple threads at once
-	sem->val--;
-	pthread_mutex_unlock(&sem->mutex);
-
-	if(sem->val < 0)		//condition if the resources are available
+	int a=sem->val;
+	if(a<=0)
 	{
-		// spaceleft=0;	
-		return -1;		//if the resources are not available it will return with -1
+		while(a<=0)
+		{
+			a=sem->val;		//we will be in this while loop until the val gets more than 0
+		}
 	}
+	while(pthread_mutex_trylock(&sem->mutex)!=0);			//we use trylock, it keeps on trying until it locks the thread
+	sem->val--;
+	pthread_mutex_unlock(&sem->mutex);				//unlocking the thread
 	return 0;		//if the resources are available, it will return with 0
 
 }
 
 int signal(struct my_semaphore *sem)
 {
-	pthread_mutex_lock(&sem->mutex);
-	//sem->val++;
-	sem->val=1;		//we are using constant value,explained in the writeup
+	while(pthread_mutex_trylock(&sem->mutex)!=0);		//we use trylock, this will try to lock, we keep it inside while loop, so that we keep on trying
+	sem->val++;		
 	pthread_mutex_unlock(&sem->mutex);
-	// if(sem->val <=0)
-	// pthread_cond_signal(&sem->cond);
 	return 0;
-
 }
 
 void PrintValue(struct my_semaphore *s)		//function for debugging(which was asked)
@@ -67,21 +65,16 @@ void* working(void* hvariable){
 	
 	while(1)
 	{
-		int c=0;
-		while(c==-1)		//this loop will continue until there is free resource available
-		{
-			c= wait(&bowl);
-		}
-
-		// if(c!=-1)
-		// {
-		printf("Philosopher %d eats using forks %d and %d\n",num, num,(num+1)%NumPhil);		//printing as asked in the question
+		wait(&bowl);		//first we are selecting bowl this will avoid any kind of deadlock
+		wait(fork);		//selecting first fork
+		wait(forknext);		//selecting second fork
+		
+		printf("Philosopher %d eats using forks %d and %d\n",num, num,(num+1)%NumPhil);
 		sleep(1);
-		signal(&bowl);		//once the resources are available we signal it
-			// (&bowl)->val=1;
-		// }
 
-		// c=signal(&bowl);
+		signal(forknext);		//keeping back second fork
+		signal(fork);		//keeping back first fork
+		signal(&bowl);
 	}
 	
 	// PrintValue(fork);
