@@ -3,16 +3,16 @@ org 0x7c00
 
 boot:
     mov ax, 0x2401
-    int 0x15 ; enable A20 bit
+    int 0x15 ;          enable A20 bit
 
 mov ax, 0x3
-int 0x10 ; set vga text mode 3
+int 0x10 ;              set vga text mode 3
 
-lgdt [gdt_pointer] ; load the gdt table
+lgdt [gdt_pointer] ;    load the gdt table
 mov eax, cr0 
-or eax,0x1 ; set the protected mode bit on special CPU reg cr0
+or eax,0x1 ;            set the protected mode bit on special CPU reg cr0
 mov cr0, eax
-jmp CODE_SEG:boot2 ; long jump to the code segment
+jmp CODE_SEG:boot2 ;    long jump to the code segment
 
 ; Build a Global Descriptor Table with Data and Code Segments. 
 gdt_start:
@@ -52,7 +52,6 @@ boot2:
 .loop:
     lodsb
     or al,al
-    ;jz halt
     jz .codepart2
     or eax,0x0100
     mov word [ebx], ax
@@ -62,9 +61,10 @@ boot2:
 .codepart2:
     mov edx, cr0
     mov ecx, 32          ; 32 bits in a dword
-    mov ebx, 000B8100h
+    mov ebx, 000B8170h
+
 .loop2:
-    mov eax, 00000130h   ; BlueOnBlack "0"
+    mov eax, 130h        ; BlueOnBlack "0"
     shl edx, 1           ; Top bit to the carry flag
     adc eax, 0           ; -> AL="0" or AL="1"
     mov [ebx], ax
@@ -72,12 +72,10 @@ boot2:
     dec ecx
     jnz .loop2
 
-
-
 halt:
     cli
     hlt
-hello: db "Hello world!",0
+hello: db "Hello world!             value of CR0 register:",0
 
 times 510 - ($-$$) db 0 ; The remaining bytes in the bootloader are set to 0. $ evaluates to the assembly position at the beginning of the line containing the expression; so you can code an infinite loop using JMP $. $$ evaluates to the beginning of the current section; so you can tell how far into the section you are by using ($−$$).
 

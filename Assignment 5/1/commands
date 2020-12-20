@@ -4,5 +4,4 @@ boot.s contains our source file
 nasm -o boot.bin boot.asm
 
 qemu-system-x86_64 boot.bin
-	OR
-qemu-system-i386 -fda boot.bin
+
